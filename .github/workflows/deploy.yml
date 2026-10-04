@@ -1,0 +1,38 @@
+name: Deploy Next Frontend to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy frontend
+        run: |
+          cd /home/ec2-user/medium-3-next-frontend
+
+          git fetch origin
+          git reset --hard origin/main
+
+          docker stop medium-3-next-container || true
+          docker rm medium-3-next-container || true
+
+          docker build -t medium-3-next .
+
+          docker run -d \
+            --name medium-3-next-container \
+            --network app-network \
+            --env-file .env.local \
+            -p 3000:3000 \
+            medium-3-next
+
+      - name: Verify frontend
+        run: |
+          sleep 3
+          curl --fail http://127.0.0.1/
