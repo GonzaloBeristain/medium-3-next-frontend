@@ -31,7 +31,7 @@ export default async function Home() {
     <main className="min-h-screen flex items-center justify-center">
       <div className="p-8 border rounded-xl">
         <h1 className="text-2xl font-bold mb-4">
-          Frontend Next.js
+          Frontend Next.js desplegado con CI/CD
         </h1>
 
         <p>Status: {health.status}</p>
